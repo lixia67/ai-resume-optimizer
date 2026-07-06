@@ -9,7 +9,9 @@ AI Resume Optimizer is a small Next.js MVP that turns raw experience into role-s
 - Example content autofill
 - Client-side input validation
 - Real DeepSeek resume optimization
+- AI Evaluation Pipeline with structured quality scores and analysis
 - Structured results for:
+  - AI Evaluation
   - Optimized Resume
   - Why This Works
   - Interview Script
@@ -24,6 +26,16 @@ AI Resume Optimizer is a small Next.js MVP that turns raw experience into role-s
 - Tailwind CSS
 - Next.js Route Handler
 - DeepSeek Chat Completions API
+
+## AI Engineering Showcase
+
+This project demonstrates:
+
+- Prompt Engineering
+- Structured JSON Output
+- Runtime Validation
+- Type-safe AI Response
+- AI Evaluation UI Rendering
 
 ## Local Setup
 

@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 
+import type { OptimizeResult } from "@/types/optimization";
+
 type OptimizeRequest = {
   job?: unknown;
   experience?: unknown;
@@ -13,11 +15,81 @@ type DeepSeekResponse = {
   }>;
 };
 
-type OptimizeResult = {
-  optimizedResume: string;
-  reason: string;
-  interviewScript: string;
-};
+const systemPrompt = `You are an AI Resume Reviewer and Optimization Assistant.
+
+Follow this process internally:
+1. Review the user's original experience against the target job.
+2. Generate an AI evaluation with structured scores.
+3. Rewrite the resume content.
+4. Explain why the rewrite works.
+5. Generate an interview script.
+
+Return only a valid JSON object. Do not return Markdown, code fences, or additional text.
+
+The JSON must use this exact structure:
+{
+  "optimizedResume": "...",
+  "reason": "...",
+  "interviewScript": "...",
+  "aiEvaluation": {
+    "overall": 82,
+    "clarity": 80,
+    "impact": 85,
+    "relevance": 78,
+    "keywordCoverage": 84,
+    "analysis": "..."
+  }
+}
+
+All five scores must be finite numbers between 0 and 100. The analysis must be a concise, non-empty explanation of the evaluation. Keep the resume rewrite professional, concise, outcome-oriented, and appropriate for students or interns. Do not invent skills, technologies, responsibilities, metrics, or outcomes that are not supported by the original experience. If impact is not quantified, improve the wording without fabricating numbers.`;
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function isValidScore(value: unknown): value is number {
+  return typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 100;
+}
+
+function parseOptimizeResult(value: unknown): OptimizeResult | null {
+  if (!isRecord(value) || !isRecord(value.aiEvaluation)) {
+    return null;
+  }
+
+  const evaluation = value.aiEvaluation;
+
+  if (
+    typeof value.optimizedResume !== "string" ||
+    !value.optimizedResume.trim() ||
+    typeof value.reason !== "string" ||
+    !value.reason.trim() ||
+    typeof value.interviewScript !== "string" ||
+    !value.interviewScript.trim() ||
+    !isValidScore(evaluation.overall) ||
+    !isValidScore(evaluation.clarity) ||
+    !isValidScore(evaluation.impact) ||
+    !isValidScore(evaluation.relevance) ||
+    !isValidScore(evaluation.keywordCoverage) ||
+    typeof evaluation.analysis !== "string" ||
+    !evaluation.analysis.trim()
+  ) {
+    return null;
+  }
+
+  return {
+    optimizedResume: value.optimizedResume.trim(),
+    reason: value.reason.trim(),
+    interviewScript: value.interviewScript.trim(),
+    aiEvaluation: {
+      overall: evaluation.overall,
+      clarity: evaluation.clarity,
+      impact: evaluation.impact,
+      relevance: evaluation.relevance,
+      keywordCoverage: evaluation.keywordCoverage,
+      analysis: evaluation.analysis.trim(),
+    },
+  };
+}
 
 export async function POST(request: Request) {
   let body: OptimizeRequest;
@@ -68,12 +140,11 @@ export async function POST(request: Request) {
         messages: [
           {
             role: "system",
-            content:
-              '你是一名资深互联网 HR 和简历优化专家，请帮助用户把经历优化成适合求职简历的专业表达。要求语言简洁、突出成果、适合应届生和实习生。只返回合法 JSON，不要返回 Markdown、代码块或任何额外说明。JSON 格式必须严格为：{"optimizedResume":"优化后的简历描述","reason":"优化理由","interviewScript":"面试时可以如何讲述这段经历"}。',
+            content: systemPrompt,
           },
           {
             role: "user",
-            content: `目标岗位：${body.job}\n原始经历：${body.experience}`,
+            content: `Target job: ${body.job}\nOriginal experience: ${body.experience}`,
           },
         ],
         response_format: {
@@ -126,28 +197,21 @@ export async function POST(request: Request) {
       );
     }
 
-    let result: OptimizeResult;
+    let result: OptimizeResult | null;
 
     try {
-      const parsed = JSON.parse(content) as Partial<OptimizeResult>;
-
-      if (
-        typeof parsed.optimizedResume !== "string" ||
-        !parsed.optimizedResume.trim() ||
-        typeof parsed.reason !== "string" ||
-        !parsed.reason.trim() ||
-        typeof parsed.interviewScript !== "string" ||
-        !parsed.interviewScript.trim()
-      ) {
-        throw new Error("DeepSeek response fields are invalid.");
-      }
-
-      result = {
-        optimizedResume: parsed.optimizedResume.trim(),
-        reason: parsed.reason.trim(),
-        interviewScript: parsed.interviewScript.trim(),
-      };
+      result = parseOptimizeResult(JSON.parse(content) as unknown);
     } catch {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "AI response format error.",
+        },
+        { status: 500 }
+      );
+    }
+
+    if (!result) {
       return NextResponse.json(
         {
           success: false,
