@@ -13,3 +13,15 @@ export type OptimizeResult = {
   interviewScript: string;
   aiEvaluation: AiEvaluation;
 };
+
+export type OptimizeSuccessResponse = {
+  success: true;
+  result: OptimizeResult;
+};
+
+export type OptimizeErrorResponse = {
+  success: false;
+  error: string;
+};
+
+export type OptimizeResponse = OptimizeSuccessResponse | OptimizeErrorResponse;

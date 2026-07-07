@@ -32,10 +32,24 @@ AI Resume Optimizer is a small Next.js MVP that turns raw experience into role-s
 This project demonstrates:
 
 - Prompt Engineering
+- AI Orchestration Layer
+- Prompt Pipeline
 - Structured JSON Output
+- Structured JSON Contract
 - Runtime Validation
 - Type-safe AI Response
+- Type-safe Rendering
+- Provider Boundary
 - AI Evaluation UI Rendering
+
+The AI workflow is intentionally separated from the HTTP route:
+
+- `src/app/api/optimize/route.ts` handles the HTTP request and response.
+- `src/ai/optimize/prompt.ts` defines the one-call prompt pipeline.
+- `src/ai/optimize/contract.ts` documents the structured output contract.
+- `src/ai/optimize/validation.ts` validates unknown AI output at runtime.
+- `src/ai/optimize/orchestrator.ts` coordinates prompt building, provider calls, parsing, and validation.
+- `src/ai/providers/deepseek.ts` isolates DeepSeek-specific API details.
 
 ## Local Setup
 
@@ -73,7 +87,7 @@ npm run build
 1. Open the landing page and select **Start Optimizing**.
 2. Enter a target role and raw resume experience, or select **Use Example**.
 3. Select **Optimize Resume**.
-4. Review the three structured result sections.
+4. Review the AI Evaluation and three structured result sections.
 5. Copy one section or copy the complete result as Markdown.
 
 ## API
