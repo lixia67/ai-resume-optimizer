@@ -25,6 +25,12 @@ export const OPTIMIZATION_EXPECTED_JSON_SHAPE = `{
         "reason": "string"
       }
     ]
+  },
+  "jdMatchAnalysis": {
+    "matchedStrengths": ["string"],
+    "missingKeywords": ["string"],
+    "improvementFocus": ["string"],
+    "roleFitSummary": "string"
   }
 }`;
 
@@ -48,4 +54,8 @@ export const OPTIMIZATION_FIELD_GUIDE = [
   "diff.changes[].before: the original expression fragment.",
   "diff.changes[].after: the optimized expression fragment.",
   "diff.changes[].reason: why this change improves the resume.",
+  "jdMatchAnalysis.matchedStrengths: one to three strengths from the original experience that match the target role.",
+  "jdMatchAnalysis.missingKeywords: zero to five role-relevant keyword opportunities not clearly shown in the resume.",
+  "jdMatchAnalysis.improvementFocus: one to five concrete next-step improvements.",
+  "jdMatchAnalysis.roleFitSummary: concise role-fit summary.",
 ];

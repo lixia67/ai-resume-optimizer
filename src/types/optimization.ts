@@ -22,12 +22,20 @@ export type ResumeDiff = {
   changes: ResumeDiffChange[];
 };
 
+export type JdMatchAnalysis = {
+  matchedStrengths: string[];
+  missingKeywords: string[];
+  improvementFocus: string[];
+  roleFitSummary: string;
+};
+
 export type OptimizeResult = {
   optimizedResume: string;
   reason: string;
   interviewScript: string;
   aiEvaluation: AiEvaluation;
   diff: ResumeDiff;
+  jdMatchAnalysis: JdMatchAnalysis;
 };
 
 export type OptimizeSuccessResponse = {
