@@ -13,6 +13,18 @@ export const OPTIMIZATION_EXPECTED_JSON_SHAPE = `{
     "relevance": 78,
     "keywordCoverage": 84,
     "analysis": "string"
+  },
+  "diff": {
+    "before": "string",
+    "after": "string",
+    "changes": [
+      {
+        "type": "clarity",
+        "before": "string",
+        "after": "string",
+        "reason": "string"
+      }
+    ]
   }
 }`;
 
@@ -29,4 +41,11 @@ export const OPTIMIZATION_FIELD_GUIDE = [
   "aiEvaluation.relevance: relevance to the target job.",
   "aiEvaluation.keywordCoverage: coverage of role-relevant keywords.",
   "aiEvaluation.analysis: concise explanation of the evaluation.",
+  "diff.before: the user's original experience text.",
+  "diff.after: exactly the same string as optimizedResume.",
+  "diff.changes: one to four specific changes made during optimization.",
+  "diff.changes[].type: one of clarity, impact, keyword, or structure.",
+  "diff.changes[].before: the original expression fragment.",
+  "diff.changes[].after: the optimized expression fragment.",
+  "diff.changes[].reason: why this change improves the resume.",
 ];

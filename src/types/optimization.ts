@@ -7,11 +7,27 @@ export type AiEvaluation = {
   analysis: string;
 };
 
+export type ResumeDiffChangeType = "clarity" | "impact" | "keyword" | "structure";
+
+export type ResumeDiffChange = {
+  type: ResumeDiffChangeType;
+  before: string;
+  after: string;
+  reason: string;
+};
+
+export type ResumeDiff = {
+  before: string;
+  after: string;
+  changes: ResumeDiffChange[];
+};
+
 export type OptimizeResult = {
   optimizedResume: string;
   reason: string;
   interviewScript: string;
   aiEvaluation: AiEvaluation;
+  diff: ResumeDiff;
 };
 
 export type OptimizeSuccessResponse = {

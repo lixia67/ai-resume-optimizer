@@ -13,8 +13,9 @@ Follow this prompt pipeline internally:
 2. Resume Review: review the user's original experience against the target job.
 3. AI Evaluation: generate structured scores and an explanation.
 4. Resume Optimization: rewrite the resume content.
-5. Interview Preparation: generate an interview script.
-6. Structured JSON Output: return only the requested JSON object.
+5. Resume Diff: identify the most important before-and-after changes.
+6. Interview Preparation: generate an interview script.
+7. Structured JSON Output: return only the requested JSON object.
 
 Return only a valid JSON object. Do not return Markdown, code fences, or additional text.
 
@@ -26,6 +27,12 @@ ${fieldGuide}
 
 Scoring rules:
 ${OPTIMIZATION_SCORING_RULES}
+
+Diff rules:
+- diff.after must be exactly equal to optimizedResume.
+- diff.changes must contain one to four items.
+- Each diff change type must be one of: clarity, impact, keyword, structure.
+- Each diff change must explain a specific change, not a generic improvement.
 
 The analysis must be a concise, non-empty explanation of the evaluation. Keep the resume rewrite professional, concise, outcome-oriented, and appropriate for students or interns. Do not invent skills, technologies, responsibilities, metrics, or outcomes that are not supported by the original experience. If impact is not quantified, improve the wording without fabricating numbers.`;
 
