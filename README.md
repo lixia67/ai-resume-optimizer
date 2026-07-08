@@ -1,29 +1,16 @@
 # AI Resume Optimizer
 
-AI Resume Optimizer is a small Next.js MVP that turns raw experience into role-specific resume content and interview talking points using the DeepSeek Chat Completions API.
+AI Resume Optimizer is an AI application showcase project that turns raw experience into structured, explainable resume optimization output.
 
-## Features
+## Project Overview
 
-- Responsive landing page
-- Target role and experience input
-- Example content autofill
-- Client-side input validation
-- Real DeepSeek resume optimization
-- AI Evaluation Pipeline with structured quality scores and analysis
-- JD Match Analysis for role-fit strengths and keyword opportunities
-- AI-generated resume readiness assessment
-- Resume Diff with before-and-after change explanations
-- Structured results for:
-  - AI Evaluation
-  - JD Match Analysis
-  - ATS Readiness
-  - Resume Diff
-  - Optimized Resume
-  - Why This Works
-  - Interview Script
-- Copy individual result sections
-- Copy the complete result as Markdown
-- Loading, API error, and AI response format handling
+The project demonstrates how to build a practical AI workflow with a Next.js frontend, a server-side route handler, a dedicated AI orchestration layer, structured JSON output, runtime validation, and type-safe UI rendering.
+
+It is intentionally scoped as a portfolio project, not a commercial SaaS product. It does not include authentication, payments, a database, or user history.
+
+## Live Demo
+
+[https://ai-resume-optimizer-lovat.vercel.app](https://ai-resume-optimizer-lovat.vercel.app)
 
 ## Tech Stack
 
@@ -32,118 +19,114 @@ AI Resume Optimizer is a small Next.js MVP that turns raw experience into role-s
 - Tailwind CSS
 - Next.js Route Handler
 - DeepSeek Chat Completions API
+- Vercel
 
-## AI Engineering Showcase
+## Core Features
 
-This project demonstrates:
+- Responsive landing page
+- Resume experience input with example autofill
+- DeepSeek-powered resume optimization
+- AI Evaluation with structured quality scores
+- JD Match Analysis for role-fit strengths and keyword opportunities
+- ATS Readiness as an AI-generated resume readiness assessment
+- Resume Diff with before-and-after explanations
+- Interview Script generation
+- Copy individual sections
+- Copy all results as Markdown
 
-- Prompt Engineering
+## AI Workflow
+
+The AI workflow is designed as a single-call structured pipeline:
+
+```text
+Job Understanding
+-> JD Match Analysis
+-> ATS Readiness
+-> Resume Optimization
+-> Resume Diff
+-> Interview Preparation
+-> Structured JSON Output
+```
+
+The output is validated before it reaches the UI, so the page renders typed data instead of trusting raw model text.
+
+## Architecture
+
+```text
+Browser
+-> Next.js Route Handler
+-> AI Orchestrator
+-> Prompt Pipeline
+-> DeepSeek Provider
+-> Runtime Validation
+-> Type-safe UI Rendering
+```
+
+The route handler owns HTTP concerns. The AI orchestration layer owns prompt construction, provider calls, response parsing, and validation. The frontend only receives structured, type-safe result data.
+
+## Engineering Highlights
+
+- Server-only API key handling
 - AI Orchestration Layer
-- Prompt Pipeline
-- Structured JSON Output
+- Prompt Engineering with a clear workflow
 - Structured JSON Contract
-- Runtime Validation
-- Type-safe AI Response
-- Type-safe Rendering
-- Provider Boundary
-- AI Evaluation UI Rendering
-- JD Match Analysis Rendering
-- ATS Readiness Rendering
-- Resume Diff Rendering
+- Runtime Validation for model output
+- Type-safe response rendering
+- Provider Boundary for DeepSeek-specific logic
+- Explainable AI output through JD Match Analysis and Resume Diff
+- Vercel production deployment
 
-The AI workflow is intentionally separated from the HTTP route:
+## Local Development
 
-- `src/app/api/optimize/route.ts` handles the HTTP request and response.
-- `src/ai/optimize/prompt.ts` defines the one-call prompt pipeline.
-- `src/ai/optimize/contract.ts` documents the structured output contract.
-- `src/ai/optimize/validation.ts` validates unknown AI output at runtime.
-- `src/ai/optimize/orchestrator.ts` coordinates prompt building, provider calls, parsing, and validation.
-- `src/ai/providers/deepseek.ts` isolates DeepSeek-specific API details.
-
-## Local Setup
-
-1. Install dependencies:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-2. Create `.env.local` in the project root:
-
-```bash
-DEEPSEEK_API_KEY=your_deepseek_api_key_here
-```
-
-Do not commit `.env.local` or place a real API key in source code. The repository's `.gitignore` excludes local environment files.
-
-3. Start the development server:
+Start the development server:
 
 ```bash
 npm run dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000).
+Open [http://localhost:3000](http://localhost:3000).
 
-## Validation Commands
+Run project checks:
 
 ```bash
+npm run format:check
 npm run lint
 npm run build
 ```
 
-## Application Flow
+## Environment Variables
 
-1. Open the landing page and select **Start Optimizing**.
-2. Enter a target role and raw resume experience, or select **Use Example**.
-3. Select **Optimize Resume**.
-4. Review the AI Evaluation, JD Match Analysis, ATS Readiness, Resume Diff, and three structured result sections.
-5. Copy one section or copy the complete result as Markdown.
+Create `.env.local` in the project root:
 
-## API
-
-`POST /api/optimize`
-
-Request body:
-
-```json
-{
-  "job": "Frontend Developer Intern",
-  "experience": "Built a campus second-hand trading mini app."
-}
+```bash
+DEEPSEEK_API_KEY=your_deepseek_api_key_here
 ```
 
-The Route Handler reads `DEEPSEEK_API_KEY` on the server and returns a structured optimization result. The browser never receives or reads the API key.
+Do not commit `.env.local` or place a real API key in source code. Do not expose this key with a `NEXT_PUBLIC_` prefix.
 
-## Deploy to Vercel
+## Deployment
 
-Vercel can deploy this Next.js project without additional runtime configuration.
+The project is deployed on Vercel.
 
-1. Push the project to a GitHub, GitLab, or Bitbucket repository. Confirm that `.env.local` is not included in the commit.
-2. In Vercel, select **Add New Project** and import the repository.
-3. Keep the detected framework preset as **Next.js**. Use the repository root as the Root Directory and keep the default install and build commands.
-4. Before deploying, open **Project Settings > Environment Variables** and add:
+To deploy your own copy:
 
-```text
-Name: DEEPSEEK_API_KEY
-Value: your_deepseek_api_key
-Environments: Production and Preview
-```
+1. Push the repository to GitHub.
+2. Import the project into Vercel.
+3. Keep the framework preset as Next.js.
+4. Add `DEEPSEEK_API_KEY` in Vercel Project Settings.
+5. Deploy and test `/resume` with the example input.
 
-Do not rename this variable with a `NEXT_PUBLIC_` prefix. It must remain server-only.
+If the API returns `Server missing DEEPSEEK_API_KEY.`, confirm the variable is configured for the current Vercel environment and redeploy.
 
-5. Deploy the project. If the environment variable is added or changed after a deployment, trigger a new deployment so the new value is available to the Vercel Function.
+## Future Improvements
 
-See the official [Next.js on Vercel](https://vercel.com/docs/frameworks/full-stack/nextjs) and [Environment Variables](https://vercel.com/docs/environment-variables) documentation for dashboard and CLI alternatives.
-
-### Post-Deployment Test
-
-1. Open the production deployment URL and confirm the landing page loads.
-2. Select **Start Optimizing** and confirm `/resume` loads.
-3. Select **Use Example** and then **Optimize Resume**.
-4. Confirm the request completes and all structured result cards appear.
-5. Test an individual **Copy** button and **Copy All as Markdown** in a browser with clipboard permission.
-6. If optimization returns `Server missing DEEPSEEK_API_KEY.`, confirm the variable is configured for the current Vercel environment and redeploy.
-
-## MVP Scope
-
-This version intentionally does not include authentication, payments, a database, file uploads, or history management.
+- Prompt Presets for different optimization styles
+- Download Markdown export
+- Prompt Inspector for showcasing prompt design
+- PDF Upload as a future optional input path
