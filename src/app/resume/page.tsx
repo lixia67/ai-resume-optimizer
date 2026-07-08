@@ -97,6 +97,23 @@ function formatResultAsMarkdown(result: OptimizeResult) {
     "",
     `Role Fit Summary: ${result.jdMatchAnalysis.roleFitSummary}`,
     "",
+    "## ATS Readiness",
+    "",
+    `- Readiness Score: ${result.atsReadiness.score}/100`,
+    "",
+    "### Keyword Signals",
+    ...result.atsReadiness.keywordSignals.map((signal) => `- ${signal}`),
+    "",
+    "### Readability Notes",
+    ...result.atsReadiness.readabilityNotes.map((note) => `- ${note}`),
+    "",
+    "### Risk Areas",
+    ...(result.atsReadiness.riskAreas.length
+      ? result.atsReadiness.riskAreas.map((risk) => `- ${risk}`)
+      : ["No major readiness risks detected."]),
+    "",
+    `Summary: ${result.atsReadiness.summary}`,
+    "",
     "## Resume Diff",
     "",
     "### Before",
@@ -453,6 +470,83 @@ export default function ResumePage() {
                       </p>
                     </div>
                   </div>
+                </article>
+
+                <article className="rounded-lg border border-teal-200 bg-teal-50 p-5 shadow-sm sm:p-6">
+                  <div className="flex flex-col gap-3 border-b border-teal-200 pb-5 sm:flex-row sm:items-end sm:justify-between">
+                    <div>
+                      <p className="text-sm font-semibold uppercase tracking-wide text-teal-700">
+                        ATS Readiness
+                      </p>
+                      <h3 className="mt-2 text-xl font-semibold text-slate-950">
+                        AI-generated resume readiness assessment
+                      </h3>
+                    </div>
+                    <div className="text-left sm:text-right">
+                      <p className="text-sm font-semibold text-slate-600">Readiness Score</p>
+                      <p className="mt-1 text-slate-600">
+                        <span className="text-3xl font-semibold text-slate-950">
+                          {result.atsReadiness.score}
+                        </span>{" "}
+                        / 100
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 grid gap-4 xl:grid-cols-2">
+                    <div className="rounded-md border border-teal-200 bg-white p-4">
+                      <p className="text-sm font-semibold text-slate-950">Keyword Signals</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {result.atsReadiness.keywordSignals.map((signal) => (
+                          <span
+                            key={signal}
+                            className="rounded-full border border-teal-200 bg-teal-50 px-3 py-1 text-sm font-medium text-teal-800"
+                          >
+                            {signal}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="rounded-md border border-teal-200 bg-white p-4">
+                      <p className="text-sm font-semibold text-slate-950">Readability Notes</p>
+                      <ul className="mt-3 space-y-2 leading-7 text-slate-700">
+                        {result.atsReadiness.readabilityNotes.map((note) => (
+                          <li key={note} className="break-words">
+                            {note}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div className="mt-5 rounded-md border border-teal-200 bg-white p-4">
+                    <p className="text-sm font-semibold text-slate-950">Risk Areas</p>
+                    {result.atsReadiness.riskAreas.length ? (
+                      <ul className="mt-3 space-y-2 leading-7 text-slate-700">
+                        {result.atsReadiness.riskAreas.map((risk) => (
+                          <li key={risk} className="break-words">
+                            {risk}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="mt-3 leading-7 text-slate-700">
+                        No major readiness risks detected.
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="mt-5 rounded-md border border-teal-200 bg-white p-4">
+                    <p className="text-sm font-semibold text-slate-950">Summary</p>
+                    <p className="mt-3 break-words whitespace-pre-wrap leading-7 text-slate-700">
+                      {result.atsReadiness.summary}
+                    </p>
+                  </div>
+
+                  <p className="mt-5 text-xs text-slate-500">
+                    This is an AI-generated readiness assessment, not a real ATS result.
+                  </p>
                 </article>
 
                 <article className="rounded-lg border border-sky-200 bg-sky-50 p-5 shadow-sm sm:p-6">

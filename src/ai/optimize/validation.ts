@@ -43,7 +43,8 @@ export function validateOptimizeResult(value: unknown): OptimizeResult {
     !isRecord(value) ||
     !isRecord(value.aiEvaluation) ||
     !isRecord(value.diff) ||
-    !isRecord(value.jdMatchAnalysis)
+    !isRecord(value.jdMatchAnalysis) ||
+    !isRecord(value.atsReadiness)
   ) {
     throw new Error(AI_RESPONSE_FORMAT_ERROR);
   }
@@ -58,6 +59,8 @@ export function validateOptimizeResult(value: unknown): OptimizeResult {
   const diffAfter = readRequiredString(diff.after);
   const jdMatchAnalysis = value.jdMatchAnalysis;
   const roleFitSummary = readRequiredString(jdMatchAnalysis.roleFitSummary);
+  const atsReadiness = value.atsReadiness;
+  const atsSummary = readRequiredString(atsReadiness.summary);
 
   if (
     !optimizedResume ||
@@ -78,7 +81,12 @@ export function validateOptimizeResult(value: unknown): OptimizeResult {
     !isStringArrayInRange(jdMatchAnalysis.matchedStrengths, 1, 3) ||
     !isStringArrayInRange(jdMatchAnalysis.missingKeywords, 0, 5) ||
     !isStringArrayInRange(jdMatchAnalysis.improvementFocus, 1, 5) ||
-    !roleFitSummary
+    !roleFitSummary ||
+    !isValidScore(atsReadiness.score) ||
+    !isStringArrayInRange(atsReadiness.keywordSignals, 1, 5) ||
+    !isStringArrayInRange(atsReadiness.readabilityNotes, 1, 5) ||
+    !isStringArrayInRange(atsReadiness.riskAreas, 0, 5) ||
+    !atsSummary
   ) {
     throw new Error(AI_RESPONSE_FORMAT_ERROR);
   }
@@ -126,6 +134,13 @@ export function validateOptimizeResult(value: unknown): OptimizeResult {
       missingKeywords: jdMatchAnalysis.missingKeywords,
       improvementFocus: jdMatchAnalysis.improvementFocus,
       roleFitSummary,
+    },
+    atsReadiness: {
+      score: atsReadiness.score,
+      keywordSignals: atsReadiness.keywordSignals,
+      readabilityNotes: atsReadiness.readabilityNotes,
+      riskAreas: atsReadiness.riskAreas,
+      summary: atsSummary,
     },
   };
 }

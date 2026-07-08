@@ -13,10 +13,11 @@ Follow this prompt pipeline internally:
 2. JD Match Analysis: compare the original experience against the target job or role title.
 3. Resume Review: review the user's original experience against the target job.
 4. AI Evaluation: generate structured scores and an explanation.
-5. Resume Optimization: rewrite the resume content.
-6. Resume Diff: identify the most important before-and-after changes.
-7. Interview Preparation: generate an interview script.
-8. Structured JSON Output: return only the requested JSON object.
+5. ATS Readiness Assessment: assess AI-generated resume readiness without claiming a real ATS result.
+6. Resume Optimization: rewrite the resume content.
+7. Resume Diff: identify the most important before-and-after changes.
+8. Interview Preparation: generate an interview script.
+9. Structured JSON Output: return only the requested JSON object.
 
 Return only a valid JSON object. Do not return Markdown, code fences, or additional text.
 
@@ -42,6 +43,17 @@ JD match rules:
 - improvementFocus must contain one to five concrete, actionable items.
 - If the user provides only a role title instead of a full job description, provide a general role-fit analysis based on the role title. Do not invent specific job requirements, company expectations, skills, certifications, or responsibilities.
 - Do not claim the user has skills, tools, metrics, responsibilities, certifications, or outcomes that are not supported by the original experience.
+
+ATS readiness rules:
+- This is an AI-generated resume readiness assessment, not a real ATS result.
+- Do not claim guaranteed ATS acceptance, rejection, pass rate, or hiring outcome.
+- atsReadiness.score must be a finite number from 0 to 100.
+- keywordSignals must contain one to five items.
+- keywordSignals should only include keywords supported by the provided job input or resume content.
+- Do not introduce unrelated technologies, skills, certifications, metrics, or responsibilities.
+- Do not automatically add skills just because they are common for the role.
+- readabilityNotes must contain one to five items.
+- riskAreas must contain zero to five items.
 
 The analysis must be a concise, non-empty explanation of the evaluation. Keep the resume rewrite professional, concise, outcome-oriented, and appropriate for students or interns. Do not invent skills, technologies, responsibilities, metrics, or outcomes that are not supported by the original experience. If impact is not quantified, improve the wording without fabricating numbers.`;
 

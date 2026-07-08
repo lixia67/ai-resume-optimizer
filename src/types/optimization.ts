@@ -29,6 +29,14 @@ export type JdMatchAnalysis = {
   roleFitSummary: string;
 };
 
+export type AtsReadiness = {
+  score: number;
+  keywordSignals: string[];
+  readabilityNotes: string[];
+  riskAreas: string[];
+  summary: string;
+};
+
 export type OptimizeResult = {
   optimizedResume: string;
   reason: string;
@@ -36,6 +44,7 @@ export type OptimizeResult = {
   aiEvaluation: AiEvaluation;
   diff: ResumeDiff;
   jdMatchAnalysis: JdMatchAnalysis;
+  atsReadiness: AtsReadiness;
 };
 
 export type OptimizeSuccessResponse = {

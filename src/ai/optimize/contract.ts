@@ -31,6 +31,13 @@ export const OPTIMIZATION_EXPECTED_JSON_SHAPE = `{
     "missingKeywords": ["string"],
     "improvementFocus": ["string"],
     "roleFitSummary": "string"
+  },
+  "atsReadiness": {
+    "score": 78,
+    "keywordSignals": ["string"],
+    "readabilityNotes": ["string"],
+    "riskAreas": ["string"],
+    "summary": "string"
   }
 }`;
 
@@ -58,4 +65,9 @@ export const OPTIMIZATION_FIELD_GUIDE = [
   "jdMatchAnalysis.missingKeywords: zero to five role-relevant keyword opportunities not clearly shown in the resume.",
   "jdMatchAnalysis.improvementFocus: one to five concrete next-step improvements.",
   "jdMatchAnalysis.roleFitSummary: concise role-fit summary.",
+  "atsReadiness.score: AI-generated resume readiness score from 0 to 100, not a real ATS result.",
+  "atsReadiness.keywordSignals: one to five supported keyword signals from the provided job input or resume content.",
+  "atsReadiness.readabilityNotes: one to five notes about clarity, parsing friendliness, or concise resume wording.",
+  "atsReadiness.riskAreas: zero to five readiness risks or weak signals.",
+  "atsReadiness.summary: concise AI-generated readiness summary.",
 ];

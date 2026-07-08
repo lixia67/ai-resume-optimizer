@@ -11,10 +11,12 @@ AI Resume Optimizer is a small Next.js MVP that turns raw experience into role-s
 - Real DeepSeek resume optimization
 - AI Evaluation Pipeline with structured quality scores and analysis
 - JD Match Analysis for role-fit strengths and keyword opportunities
+- AI-generated resume readiness assessment
 - Resume Diff with before-and-after change explanations
 - Structured results for:
   - AI Evaluation
   - JD Match Analysis
+  - ATS Readiness
   - Resume Diff
   - Optimized Resume
   - Why This Works
@@ -46,6 +48,7 @@ This project demonstrates:
 - Provider Boundary
 - AI Evaluation UI Rendering
 - JD Match Analysis Rendering
+- ATS Readiness Rendering
 - Resume Diff Rendering
 
 The AI workflow is intentionally separated from the HTTP route:
@@ -93,7 +96,7 @@ npm run build
 1. Open the landing page and select **Start Optimizing**.
 2. Enter a target role and raw resume experience, or select **Use Example**.
 3. Select **Optimize Resume**.
-4. Review the AI Evaluation, JD Match Analysis, Resume Diff, and three structured result sections.
+4. Review the AI Evaluation, JD Match Analysis, ATS Readiness, Resume Diff, and three structured result sections.
 5. Copy one section or copy the complete result as Markdown.
 
 ## API
